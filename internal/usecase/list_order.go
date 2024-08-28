@@ -7,7 +7,7 @@ import (
 
 type ListOrderUseCase struct {
 	OrderRepository entity.OrderRepositoryInterface
-	OrderCreated    events.EventInterface
+	OrdersListed    events.EventInterface
 	EventDispatcher events.EventDispatcherInterface
 }
 
@@ -40,8 +40,8 @@ func (l *ListOrderUseCase) Execute() ([]OrderOutputDTO, error) {
 		out = append(out, dto)
 	}
 
-	l.OrderCreated.SetPayload(out)
-	l.EventDispatcher.Dispatch(l.OrderCreated)
+	l.OrdersListed.SetPayload(out)
+	l.EventDispatcher.Dispatch(l.OrdersListed)
 
 	return out, nil
 }
