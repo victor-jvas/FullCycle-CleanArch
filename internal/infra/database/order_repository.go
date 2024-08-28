@@ -36,6 +36,8 @@ func (r *OrderRepository) GetTotal() (int, error) {
 }
 
 func (r *OrderRepository) GetAll() ([]entity.Order, error) {
+	var orders []entity.Order
+
 	stmt, err := r.Db.Prepare("SELECT * FROM orders")
 	if err != nil {
 		return []entity.Order{}, err
@@ -45,8 +47,8 @@ func (r *OrderRepository) GetAll() ([]entity.Order, error) {
 	if err != nil {
 		return []entity.Order{}, err
 	}
+	defer result.Close()
 
-	var orders []entity.Order
 	for result.Next() {
 		var order entity.Order
 		if err := result.Scan(
@@ -56,6 +58,7 @@ func (r *OrderRepository) GetAll() ([]entity.Order, error) {
 			&order.FinalPrice); err != nil {
 			return orders, err
 		}
+		orders = append(orders, order)
 	}
 
 	return orders, nil

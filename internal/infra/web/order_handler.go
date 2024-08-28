@@ -47,3 +47,18 @@ func (h *WebOrderHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func (h *WebOrderHandler) GetOrders(w http.ResponseWriter, r *http.Request) {
+
+	listOrders := usecase.NewListOrderUseCase(h.OrderRepository, h.OrderCreatedEvent, h.EventDispatcher)
+	output, err := listOrders.Execute()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	err = json.NewEncoder(w).Encode(output)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+}

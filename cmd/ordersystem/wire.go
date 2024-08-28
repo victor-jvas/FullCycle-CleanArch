@@ -23,6 +23,8 @@ var setOrderRepositoryDependency = wire.NewSet(
 var setEventDispatcherDependency = wire.NewSet(
 	events.NewEventDispatcher,
 	event.NewOrderCreated,
+	event.NewOrdersListed,
+	wire.Bind(new(events.EventInterface), new(*event.OrdersListed)),
 	wire.Bind(new(events.EventInterface), new(*event.OrderCreated)),
 	wire.Bind(new(events.EventDispatcherInterface), new(*events.EventDispatcher)),
 )
